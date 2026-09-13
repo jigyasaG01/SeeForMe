@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Perception Console — SeeForMe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-wrapper">
+  <!-- Global Top Navigation -->
+  <header class="site-nav">
+    <a href="index.html" class="brand-link">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>SeeForMe</h1>
+      </div>
+    </a>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="dashboard.html" class="nav-link active">Live Dashboard</a></li>
+      <li><a href="architecture.html" class="nav-link">Architecture</a></li>
+      <li><a href="docs.html" class="nav-link">API & Docs</a></li>
+      <li><a href="about.html" class="nav-link">About & Roadmap</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div class="status-pill" id="engine-status-pill">
+        <span class="status-dot online" id="conn-dot"></span>
+        <span id="hw-name">Loading Engine...</span>
+      </div>
+      <a href="https://github.com/jigyasaG01/SeeForMe" target="_blank" rel="noopener noreferrer" class="github-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        <span>GitHub</span>
+      </a>
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Workspace Grid -->
+  <main class="dashboard-main">
+    <!-- Left: Vision Feeds Area -->
+    <section class="viewport-section">
+      <div class="video-container glass-panel">
+        <div class="viewport-header">
+          <div class="feed-title">
+            <span class="live-tag">PERCEPTION VIEW</span>
+            <span id="conn-status">Server Ready</span>
+          </div>
+          <div class="viewport-actions">
+            <button id="toggle-depth-btn" class="btn btn-ghost" title="Toggle Depth Map Overlay">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                <polyline points="2 17 12 22 22 17"/>
+                <polyline points="2 12 12 17 22 12"/>
+              </svg>
+              <span>Depth Heatmap</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Video, Preview Image & Overlay Canvas Container -->
+        <div class="media-stage" id="media-stage">
+          <video id="webcam" playsinline autoplay muted></video>
+          <!-- Dedicated uploaded test image background layer -->
+          <img id="preview-img" alt="Test Image Preview" />
+          <!-- Depth colormap heatmap overlay -->
+          <img id="depth-img" alt="Depth Heatmap" />
+          <!-- Transparent bounding box & corridor canvas -->
+          <canvas id="overlay-canvas"></canvas>
+
+          <!-- Idle Cover -->
+          <div class="viewport-idle-cover" id="idle-cover">
+            <div class="idle-content">
+              <div class="idle-icon-ring">
+                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+              </div>
+              <h3>Assistive Vision Feed Inactive</h3>
+              <p>Start your camera feed for continuous walking hazard detection or upload a photo to test distance estimation & spoken alerts.</p>
+              <div class="idle-actions">
+                <button id="start-cam-btn" class="btn btn-primary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                  </svg>
+                  <span>Start Live Camera</span>
+                </button>
+                <label class="btn btn-secondary file-upload-btn">
+                  <input type="file" id="file-input" accept="image/*" style="display:none;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                  <span>Upload Test Photo</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Voice Toast Banner -->
+          <div class="voice-alert-banner" id="voice-toast" style="display:none;">
+            <div class="speaker-icon pulse">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              </svg>
+            </div>
+            <div class="toast-content">
+              <span class="toast-title">VOICE ALERT</span>
+              <span class="toast-text" id="voice-toast-msg">Caution: Obstacle detected.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Control Bar -->
+        <div class="feed-controls">
+          <div class="control-group">
+            <button id="cam-toggle-stream-btn" class="btn btn-control" disabled>
+              <span id="cam-toggle-text">Pause Stream</span>
+            </button>
+            <button id="cam-flip-btn" class="btn btn-control" title="Switch Front/Back Camera">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 10c0-4.418-3.582-8-8-8s-8 3.582-8 8h3l-4 5-4-5h3c0-5.523 4.477-10 10-10s10 4.477 10 10z"/>
+                <path d="M4 14c0 4.418 3.582 8 8 8s8-3.582 8-8h-3l4-5 4 5h-3c0 5.523-4.477 10-10 10S4 19.523 4 14z"/>
+              </svg>
+              <span>Flip Camera</span>
+            </button>
+            <label class="btn btn-control" title="Upload another test photo">
+              <input type="file" id="file-input-inline" accept="image/*" style="display:none;" onchange="document.getElementById('file-input').files = this.files; document.getElementById('file-input').dispatchEvent(new Event('change'))">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              <span>Test Photo</span>
+            </label>
+          </div>
+
+          <div class="control-group audio-controls">
+            <button id="audio-toggle-btn" class="btn btn-control active-audio" title="Toggle Spoken Speech">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              </svg>
+              <span id="audio-btn-text">Voice: ON</span>
+            </button>
+            <button id="test-speech-btn" class="btn btn-ghost" title="Test Web Speech Synthesis">
+              <span>Test Voice</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: Telemetry, Alerts & Settings -->
+    <aside class="sidebar-section">
+      <!-- Spoken Alerts Log Card -->
+      <div class="card glass-panel alerts-card">
+        <div class="card-header">
+          <h3>Spoken Guidance History</h3>
+          <span class="count-badge" id="alerts-count">0</span>
+        </div>
+        <div class="alerts-log-container" id="alerts-log">
+          <div class="empty-state" id="empty-alerts-placeholder">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+            </svg>
+            <p>Spoken announcements and debounced warnings appear here in real time.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-time Obstacles in View -->
+      <div class="card glass-panel objects-card">
+        <div class="card-header">
+          <h3>Obstacles in View</h3>
+          <span class="count-badge" id="objects-count">0</span>
+        </div>
+        <div class="objects-list-container" id="objects-list">
+          <div class="empty-state">
+            <p>No active obstacles. Start camera or upload a test photo.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Latency & Pipeline Metrics -->
+      <div class="card glass-panel telemetry-card">
+        <div class="card-header">
+          <h3>Pipeline Latency</h3>
+          <span class="count-badge"><span id="fps-val">0.0</span> FPS</span>
+        </div>
+        <div class="telemetry-grid">
+          <div class="metric-box">
+            <span class="metric-label">YOLOv8 Detection</span>
+            <span class="metric-value" id="t-yolo">0 ms</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-label">MiDaS Depth</span>
+            <span class="metric-value" id="t-depth">0 ms</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-label">Fusion & Ranking</span>
+            <span class="metric-value" id="t-fusion">0 ms</span>
+          </div>
+          <div class="metric-box highlight">
+            <span class="metric-label">Total Latency</span>
+            <span class="metric-value" id="t-total">0 ms</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tuning & Calibration Sliders -->
+      <div class="card glass-panel settings-card">
+        <div class="card-header">
+          <h3>Perception Tuning</h3>
+        </div>
+        <div class="settings-content">
+          <div class="slider-control">
+            <div class="slider-header">
+              <label for="conf-slider">Detection Confidence</label>
+              <span id="conf-val-label">40%</span>
+            </div>
+            <input type="range" id="conf-slider" min="20" max="80" value="40" step="5">
+          </div>
+
+          <div class="slider-control">
+            <div class="slider-header">
+              <label for="rate-slider">Voice Speech Rate</label>
+              <span id="rate-val-label">1.1x</span>
+            </div>
+            <input type="range" id="rate-slider" min="0.8" max="1.6" value="1.1" step="0.1">
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

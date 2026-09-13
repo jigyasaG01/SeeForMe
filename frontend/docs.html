@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer & API Docs — SeeForMe</title>
+  <meta name="description" content="Developer documentation, API reference, WebSocket protocol, and setup instructions for SeeForMe.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-wrapper">
+  <!-- Global Top Navigation -->
+  <header class="site-nav">
+    <a href="index.html" class="brand-link">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>SeeForMe</h1>
+      </div>
+    </a>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="dashboard.html" class="nav-link">Live Dashboard</a></li>
+      <li><a href="architecture.html" class="nav-link">Architecture</a></li>
+      <li><a href="docs.html" class="nav-link active">API & Docs</a></li>
+      <li><a href="about.html" class="nav-link">About & Roadmap</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div class="status-pill" id="engine-status-pill">
+        <span class="status-dot online" id="conn-dot"></span>
+        <span id="hw-name">Loading...</span>
+      </div>
+      <a href="https://github.com/jigyasaG01/SeeForMe" target="_blank" rel="noopener noreferrer" class="github-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        <span>GitHub</span>
+      </a>
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section class="section" style="padding: 60px 0 30px;">
+    <div class="container">
+      <span class="section-tag">Integration & Setup</span>
+      <h2 class="section-title">Developer & API Documentation</h2>
+      <p class="section-subtitle" style="margin: 0;">
+        Build on top of SeeForMe. Integrate the REST endpoints into mobile apps or stream live video over WebSockets.
+      </p>
+    </div>
+  </section>
+
+  <!-- Docs Content Container -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container" style="display: flex; flex-direction: column; gap: 40px;">
+      <!-- Quickstart Section -->
+      <div class="glass-panel" id="quickstart" style="padding: 32px;">
+        <h3 style="font-size: 1.4rem; margin-bottom: 12px; color: var(--accent-cyan);">1. Quickstart & Local Installation</h3>
+        <p style="color: var(--text-muted); margin-bottom: 16px;">
+          Set up and run SeeForMe locally using Python 3.13:
+        </p>
+        <div class="code-box">
+          <span class="code-badge">POWERSHELL / BASH</span>
+<pre><code># 1. Clone the repository
+git clone https://github.com/jigyasaG01/SeeForMe.git
+cd SeeForMe
+
+# 2. Create Python 3.13 virtual environment
+py -3.13 -m venv venv
+
+# 3. Activate the environment
+# Windows PowerShell:
+.\venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate
+
+# 4. Install dependencies
+pip install -r requirements.txt
+
+# 5. Launch development server
+python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000</code></pre>
+        </div>
+      </div>
+
+      <!-- REST API Reference -->
+      <div class="glass-panel" style="padding: 32px;">
+        <h3 style="font-size: 1.4rem; margin-bottom: 12px; color: var(--accent-cyan);">2. REST API Reference</h3>
+        <p style="color: var(--text-muted); margin-bottom: 24px;">
+          FastAPI endpoints for single-frame perception, health checks, and hardware discovery.
+        </p>
+
+        <!-- Endpoint 1 -->
+        <div style="margin-bottom: 32px;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+            <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.4); font-size: 0.8rem; font-weight: 700;">GET</span>
+            <code style="font-family: var(--font-mono); font-size: 1.1rem; color: #fff;">/api/status</code>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 12px;">
+            Returns current pipeline initialization state, active device (CUDA GPU or CPU), and configuration parameters.
+          </p>
+          <div class="code-box">
+            <span class="code-badge">JSON RESPONSE</span>
+<pre><code>{
+  "status": "online",
+  "pipeline_ready": true,
+  "device": "NVIDIA GeForce RTX 2050",
+  "cuda_available": true,
+  "torch_version": "2.14.0",
+  "config": {
+    "yolo_model": "yolov8n.pt",
+    "midas_model": "MiDaS_small",
+    "confidence_threshold": 0.40,
+    "corridor": [0.30, 0.70]
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Endpoint 2 -->
+        <div>
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+            <span class="badge" style="background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); border-color: rgba(6, 182, 212, 0.4); font-size: 0.8rem; font-weight: 700;">POST</span>
+            <code style="font-family: var(--font-mono); font-size: 1.1rem; color: #fff;">/api/process-frame</code>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 12px;">
+            Processes a single uploaded image file via multipart form-data. Returns bounding boxes, relative distances, directional bearing, debounced speech alerts, and optional base64 depth heatmap.
+          </p>
+          <div class="code-box">
+            <span class="code-badge">CURL EXAMPLE</span>
+<pre><code>curl -X POST "http://127.0.0.1:8000/api/process-frame" \
+  -F "file=@photo.jpg" \
+  -F "confidence=0.40" \
+  -F "return_depth_map=true"</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- WebSocket Streaming Protocol -->
+      <div class="glass-panel" style="padding: 32px;">
+        <h3 style="font-size: 1.4rem; margin-bottom: 12px; color: var(--accent-cyan);">3. WebSocket Streaming Protocol</h3>
+        <p style="color: var(--text-muted); margin-bottom: 16px;">
+          High-throughput full-duplex WebSocket endpoint located at <code>ws://127.0.0.1:8000/ws/stream</code>.
+        </p>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 16px;">
+          <strong>Client Payload:</strong> Send Base64-encoded JPEG data URL or binary byte array per camera frame.<br>
+          <strong>Server Payload:</strong> Streams immediate JSON responses:
+        </p>
+        <div class="code-box">
+          <span class="code-badge">WEBSOCKET JSON EVENT</span>
+<pre><code>{
+  "objects": [
+    {
+      "class_name": "person",
+      "confidence": 0.88,
+      "box": [120.0, 85.0, 240.0, 390.0],
+      "estimated_meters": 1.8,
+      "bearing": "slightly left",
+      "in_corridor": true
+    }
+  ],
+  "spoken_alerts": [
+    "Person, 2 meters, slightly left."
+  ],
+  "timings": {
+    "detection": 22.4,
+    "depth": 110.1,
+    "fusion_and_priority": 1.2,
+    "total": 133.7,
+    "fps": 7.5
+  },
+  "depth_map": "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- Configuration Settings Reference Table -->
+      <div class="glass-panel" style="padding: 32px;">
+        <h3 style="font-size: 1.4rem; margin-bottom: 16px; color: var(--accent-cyan);">4. Configuration Parameters (backend/app/config.py)</h3>
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.92rem;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--panel-border); color: var(--text-faint); text-transform: uppercase;">
+              <th style="padding: 12px;">Parameter</th>
+              <th style="padding: 12px;">Type</th>
+              <th style="padding: 12px;">Default</th>
+              <th style="padding: 12px;">Description</th>
+            </tr>
+          </thead>
+          <tbody style="color: var(--text-muted);">
+            <tr style="border-bottom: 1px solid var(--panel-border);">
+              <td style="padding: 12px; font-family: var(--font-mono); color: #fff;">YOLO_MODEL</td>
+              <td style="padding: 12px;">str</td>
+              <td style="padding: 12px; font-family: var(--font-mono);">yolov8n.pt</td>
+              <td style="padding: 12px;">YOLO weight size: n (nano), s (small), m (medium).</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--panel-border);">
+              <td style="padding: 12px; font-family: var(--font-mono); color: #fff;">MIDAS_MODEL_TYPE</td>
+              <td style="padding: 12px;">str</td>
+              <td style="padding: 12px; font-family: var(--font-mono);">MiDaS_small</td>
+              <td style="padding: 12px;">Depth model variant (MiDaS_small or DPT_Hybrid).</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--panel-border);">
+              <td style="padding: 12px; font-family: var(--font-mono); color: #fff;">WALKING_CORRIDOR_LEFT</td>
+              <td style="padding: 12px;">float</td>
+              <td style="padding: 12px; font-family: var(--font-mono);">0.30</td>
+              <td style="padding: 12px;">Left boundary of walking path (fraction of frame width).</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--panel-border);">
+              <td style="padding: 12px; font-family: var(--font-mono); color: #fff;">WALKING_CORRIDOR_RIGHT</td>
+              <td style="padding: 12px;">float</td>
+              <td style="padding: 12px; font-family: var(--font-mono);">0.70</td>
+              <td style="padding: 12px;">Right boundary of walking path (fraction of frame width).</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; font-family: var(--font-mono); color: #fff;">DEBOUNCE_COOLDOWN_SEC</td>
+              <td style="padding: 12px;">float</td>
+              <td style="padding: 12px; font-family: var(--font-mono);">3.0</td>
+              <td style="padding: 12px;">Suppresses repeat alert chatter for identical hazard bearing.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="brand-link">
+          <div class="brand-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>SeeForMe</h1>
+          </div>
+        </div>
+        <p class="footer-desc">
+          An open-source assistive navigation vision prototype helping visually impaired people navigate safely.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="dashboard.html">Live Dashboard</a></li>
+          <li><a href="architecture.html">Architecture</a></li>
+          <li><a href="docs.html">API & Docs</a></li>
+          <li><a href="about.html">About & Roadmap</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/jigyasaG01/SeeForMe" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+          <li><a href="https://docs.ultralytics.com/" target="_blank" rel="noopener noreferrer">Ultralytics Docs</a></li>
+          <li><a href="https://github.com/isl-org/MiDaS" target="_blank" rel="noopener noreferrer">Intel MiDaS</a></li>
+          <li><a href="docs.html#quickstart">Quickstart Guide</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Disclaimer</h4>
+        <div class="footer-disclaimer-box">
+          SeeForMe is an educational and prototype engineering project. It has not undergone clinical safety certification. Do not rely on it as a substitute for certified mobility aids.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 SeeForMe Project. MIT License.</span>
+      <span>Built with YOLOv8, PyTorch & FastAPI by <a href="https://github.com/jigyasaG01" target="_blank" rel="noopener noreferrer" style="color: var(--accent-cyan); text-decoration: none;">jigyasaG01</a></span>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

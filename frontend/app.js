@@ -4,8 +4,9 @@
 
 class SeeForMeApp {
   constructor() {
-    // DOM elements
+    // Media & Canvas elements
     this.video = document.getElementById("webcam");
+    this.previewImg = document.getElementById("preview-img");
     this.canvas = document.getElementById("overlay-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.depthImg = document.getElementById("depth-img");
@@ -55,7 +56,7 @@ class SeeForMeApp {
     this.isProcessing = false;
     this.showDepth = false;
     this.audioEnabled = true;
-    this.facingMode = "environment"; // default to rear camera on mobile
+    this.facingMode = "environment";
     this.totalAlertsCount = 0;
     this.speechRate = 1.1;
     this.lastSpokenText = "";
@@ -75,23 +76,29 @@ class SeeForMeApp {
   }
 
   setupEventListeners() {
-    this.startCamBtn.addEventListener("click", () => this.startCamera());
-    this.camToggleStreamBtn.addEventListener("click", () => this.toggleStream());
-    this.camFlipBtn.addEventListener("click", () => this.flipCamera());
-    this.toggleDepthBtn.addEventListener("click", () => this.toggleDepthOverlay());
-    this.audioToggleBtn.addEventListener("click", () => this.toggleAudio());
-    this.testSpeechBtn.addEventListener("click", () => this.speakAlert("Audio guidance is active. System ready."));
+    if (this.startCamBtn) this.startCamBtn.addEventListener("click", () => this.startCamera());
+    if (this.camToggleStreamBtn) this.camToggleStreamBtn.addEventListener("click", () => this.toggleStream());
+    if (this.camFlipBtn) this.camFlipBtn.addEventListener("click", () => this.flipCamera());
+    if (this.toggleDepthBtn) this.toggleDepthBtn.addEventListener("click", () => this.toggleDepthOverlay());
+    if (this.audioToggleBtn) this.audioToggleBtn.addEventListener("click", () => this.toggleAudio());
+    if (this.testSpeechBtn) this.testSpeechBtn.addEventListener("click", () => this.speakAlert("Audio guidance is active. System ready."));
 
-    this.confSlider.addEventListener("input", (e) => {
-      this.confValLabel.textContent = `${e.target.value}%`;
-    });
+    if (this.confSlider) {
+      this.confSlider.addEventListener("input", (e) => {
+        if (this.confValLabel) this.confValLabel.textContent = `${e.target.value}%`;
+      });
+    }
 
-    this.rateSlider.addEventListener("input", (e) => {
-      this.speechRate = parseFloat(e.target.value);
-      this.rateValLabel.textContent = `${this.speechRate.toFixed(1)}x`;
-    });
+    if (this.rateSlider) {
+      this.rateSlider.addEventListener("input", (e) => {
+        this.speechRate = parseFloat(e.target.value);
+        if (this.rateValLabel) this.rateValLabel.textContent = `${this.speechRate.toFixed(1)}x`;
+      });
+    }
 
-    this.fileInput.addEventListener("change", (e) => this.handleImageUpload(e));
+    if (this.fileInput) {
+      this.fileInput.addEventListener("change", (e) => this.handleImageUpload(e));
+    }
 
     window.addEventListener("resize", () => this.resizeCanvas());
   }
@@ -101,13 +108,13 @@ class SeeForMeApp {
       const res = await fetch("/api/status");
       if (res.ok) {
         const data = await res.json();
-        this.hwName.textContent = data.device || "CPU";
-        this.connDot.classList.add("active");
-        this.connStatus.textContent = "Server Ready";
+        if (this.hwName) this.hwName.textContent = data.device || "CPU";
+        if (this.connDot) this.connDot.classList.add("active");
+        if (this.connStatus) this.connStatus.textContent = "Server Ready";
       }
     } catch (err) {
       console.warn("Server status check failed:", err);
-      this.hwName.textContent = "Offline";
+      if (this.hwName) this.hwName.textContent = "Offline";
     }
   }
 
@@ -115,12 +122,12 @@ class SeeForMeApp {
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const wsUrl = `${protocol}//${window.location.host}/ws/stream`;
 
-    this.connStatus.textContent = "Connecting WS...";
+    if (this.connStatus) this.connStatus.textContent = "Connecting WS...";
     this.ws = new WebSocket(wsUrl);
 
     this.ws.onopen = () => {
-      this.connDot.classList.add("active");
-      this.connStatus.textContent = "Live Stream Connected";
+      if (this.connDot) this.connDot.classList.add("active");
+      if (this.connStatus) this.connStatus.textContent = "Live Stream Connected";
     };
 
     this.ws.onmessage = (event) => {
@@ -134,8 +141,8 @@ class SeeForMeApp {
     };
 
     this.ws.onclose = () => {
-      this.connDot.classList.remove("active");
-      this.connStatus.textContent = "Disconnected (Retrying...)";
+      if (this.connDot) this.connDot.classList.remove("active");
+      if (this.connStatus) this.connStatus.textContent = "Disconnected (Retrying...)";
       setTimeout(() => this.connectWebSocket(), 2500);
     };
 
@@ -159,10 +166,14 @@ class SeeForMeApp {
       this.video.srcObject = this.stream;
       await this.video.play();
 
-      this.idleCover.style.display = "none";
-      this.camToggleStreamBtn.disabled = false;
+      // Show video, hide preview image layer
+      if (this.previewImg) this.previewImg.style.display = "none";
+      if (this.video) this.video.style.display = "block";
+      if (this.idleCover) this.idleCover.style.display = "none";
+      if (this.camToggleStreamBtn) this.camToggleStreamBtn.disabled = false;
+
       this.isStreaming = true;
-      this.camToggleText.textContent = "Pause Stream";
+      if (this.camToggleText) this.camToggleText.textContent = "Pause Stream";
 
       this.resizeCanvas();
       this.speakAlert("Camera active. Assistive navigation started.");
@@ -176,10 +187,10 @@ class SeeForMeApp {
   toggleStream() {
     this.isStreaming = !this.isStreaming;
     if (this.isStreaming) {
-      this.camToggleText.textContent = "Pause Stream";
+      if (this.camToggleText) this.camToggleText.textContent = "Pause Stream";
       this.startStreamingLoop();
     } else {
-      this.camToggleText.textContent = "Resume Stream";
+      if (this.camToggleText) this.camToggleText.textContent = "Resume Stream";
     }
   }
 
@@ -193,23 +204,34 @@ class SeeForMeApp {
 
   toggleDepthOverlay() {
     this.showDepth = !this.showDepth;
-    this.depthImg.style.display = this.showDepth ? "block" : "none";
-    this.toggleDepthBtn.classList.toggle("btn-primary", this.showDepth);
+    if (this.depthImg) {
+      this.depthImg.style.display = this.showDepth ? "block" : "none";
+    }
+    if (this.toggleDepthBtn) {
+      this.toggleDepthBtn.classList.toggle("btn-primary", this.showDepth);
+    }
   }
 
   toggleAudio() {
     this.audioEnabled = !this.audioEnabled;
-    this.audioToggleBtn.classList.toggle("active-audio", this.audioEnabled);
-    this.audioBtnText.textContent = this.audioEnabled ? "Voice: ON" : "Voice: OFF";
+    if (this.audioToggleBtn) {
+      this.audioToggleBtn.classList.toggle("active-audio", this.audioEnabled);
+    }
+    if (this.audioBtnText) {
+      this.audioBtnText.textContent = this.audioEnabled ? "Voice: ON" : "Voice: OFF";
+    }
     if (!this.audioEnabled && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
   }
 
   resizeCanvas() {
-    if (this.video.videoWidth > 0) {
+    if (this.video && this.video.style.display !== "none" && this.video.videoWidth > 0) {
       this.canvas.width = this.video.videoWidth;
       this.canvas.height = this.video.videoHeight;
+    } else if (this.previewImg && this.previewImg.style.display !== "none" && this.previewImg.naturalWidth > 0) {
+      this.canvas.width = this.previewImg.naturalWidth;
+      this.canvas.height = this.previewImg.naturalHeight;
     }
   }
 
@@ -245,16 +267,19 @@ class SeeForMeApp {
 
     // Update Telemetry
     if (data.timings) {
-      this.tYolo.textContent = `${data.timings.detection} ms`;
-      this.tDepth.textContent = `${data.timings.depth} ms`;
-      this.tFusion.textContent = `${data.timings.fusion_and_priority} ms`;
-      this.tTotal.textContent = `${data.timings.total} ms`;
-      this.fpsVal.textContent = data.timings.fps.toFixed(1);
+      if (this.tYolo) this.tYolo.textContent = `${data.timings.detection} ms`;
+      if (this.tDepth) this.tDepth.textContent = `${data.timings.depth} ms`;
+      if (this.tFusion) this.tFusion.textContent = `${data.timings.fusion_and_priority} ms`;
+      if (this.tTotal) this.tTotal.textContent = `${data.timings.total} ms`;
+      if (this.fpsVal) this.fpsVal.textContent = data.timings.fps.toFixed(1);
     }
 
     // Update Depth Map image
-    if (data.depth_map && this.showDepth) {
+    if (data.depth_map && this.depthImg) {
       this.depthImg.src = data.depth_map;
+      if (this.showDepth) {
+        this.depthImg.style.display = "block";
+      }
     }
 
     // Render Bounding Boxes on Overlay Canvas
@@ -279,6 +304,7 @@ class SeeForMeApp {
     const h = this.canvas.height;
     if (w === 0 || h === 0) return;
 
+    // Clear transparent overlay without touching the underlying video or preview image element
     this.ctx.clearRect(0, 0, w, h);
 
     // Draw Walking Corridor overlay lines
@@ -306,7 +332,7 @@ class SeeForMeApp {
       const dist = obj.estimated_meters;
 
       // Urgency color coding
-      let color = "#10b981"; // Emerald for far
+      let color = "#10b981"; // Emerald for safe / far
       if (dist <= 1.4) {
         color = "#f43f5e"; // Rose / Red for immediate hazard
       } else if (dist <= 3.0) {
@@ -314,11 +340,11 @@ class SeeForMeApp {
       }
 
       this.ctx.save();
-      // Glow box
+      // Glowing outline
       this.ctx.strokeStyle = color;
       this.ctx.lineWidth = 3;
       this.ctx.shadowColor = color;
-      this.ctx.shadowBlur = 8;
+      this.ctx.shadowBlur = 10;
       this.ctx.strokeRect(x1, y1, boxW, boxH);
 
       // Label Pill
@@ -338,7 +364,9 @@ class SeeForMeApp {
   }
 
   updateObjectsList(objects) {
-    this.objectsCount.textContent = objects.length;
+    if (!this.objectsList) return;
+    if (this.objectsCount) this.objectsCount.textContent = objects.length;
+    
     if (objects.length === 0) {
       this.objectsList.innerHTML = `<div class="empty-state"><p>Path clear. No obstacles detected.</p></div>`;
       return;
@@ -361,13 +389,14 @@ class SeeForMeApp {
   }
 
   addAlertToLog(alertText) {
+    if (!this.alertsLog) return;
     const emptyPlaceholder = document.getElementById("empty-alerts-placeholder");
     if (emptyPlaceholder) {
       emptyPlaceholder.remove();
     }
 
     this.totalAlertsCount++;
-    this.alertsCount.textContent = this.totalAlertsCount;
+    if (this.alertsCount) this.alertsCount.textContent = this.totalAlertsCount;
 
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     const isUrgent = alertText.toLowerCase().includes("caution") || alertText.includes("under 1 meter");
@@ -387,12 +416,14 @@ class SeeForMeApp {
     }
 
     // Display visual toast
-    this.voiceToastMsg.textContent = alertText;
-    this.voiceToast.style.display = "flex";
-    clearTimeout(this.toastTimeout);
-    this.toastTimeout = setTimeout(() => {
-      this.voiceToast.style.display = "none";
-    }, 3500);
+    if (this.voiceToastMsg && this.voiceToast) {
+      this.voiceToastMsg.textContent = alertText;
+      this.voiceToast.style.display = "flex";
+      clearTimeout(this.toastTimeout);
+      this.toastTimeout = setTimeout(() => {
+        this.voiceToast.style.display = "none";
+      }, 3500);
+    }
   }
 
   speakAlert(text) {
@@ -427,10 +458,38 @@ class SeeForMeApp {
     const file = event.target.files[0];
     if (!file) return;
 
-    this.connStatus.textContent = "Processing image...";
+    if (this.connStatus) this.connStatus.textContent = "Analyzing image...";
+    
+    // Switch display to uploaded photo preview
+    if (this.stream) {
+      this.stream.getTracks().forEach(t => t.stop());
+      this.stream = null;
+    }
+    this.isStreaming = false;
+
+    const objectUrl = URL.createObjectURL(file);
+    if (this.previewImg) {
+      this.previewImg.src = objectUrl;
+      this.previewImg.style.display = "block";
+    }
+    if (this.video) {
+      this.video.style.display = "none";
+    }
+    if (this.idleCover) {
+      this.idleCover.style.display = "none";
+    }
+
+    // Update canvas size once image dimensions load
+    this.previewImg.onload = () => {
+      this.canvas.width = this.previewImg.naturalWidth;
+      this.canvas.height = this.previewImg.naturalHeight;
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    };
+
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("confidence", (parseInt(this.confSlider.value) / 100).toString());
+    const confVal = this.confSlider ? (parseInt(this.confSlider.value) / 100).toString() : "0.40";
+    formData.append("confidence", confVal);
     formData.append("return_depth_map", "true");
 
     try {
@@ -441,23 +500,21 @@ class SeeForMeApp {
       if (!res.ok) throw new Error("HTTP error " + res.status);
       const data = await res.json();
 
-      // Render image on video canvas
-      const img = new Image();
-      img.onload = () => {
-        this.idleCover.style.display = "none";
-        this.canvas.width = img.width;
-        this.canvas.height = img.height;
-        this.ctx.drawImage(img, 0, 0);
+      if (data.frame_size) {
+        this.canvas.width = data.frame_size.width;
+        this.canvas.height = data.frame_size.height;
+      }
 
-        if (data.depth_colormap_base64) {
-          data.depth_map = `data:image/jpeg;base64,${data.depth_colormap_base64}`;
-        }
-        this.handleInferenceResult(data);
-      };
-      img.src = URL.createObjectURL(file);
+      if (data.depth_colormap_base64) {
+        data.depth_map = `data:image/jpeg;base64,${data.depth_colormap_base64}`;
+      }
+
+      if (this.connStatus) this.connStatus.textContent = "Analysis Complete";
+      this.handleInferenceResult(data);
     } catch (err) {
       console.error("Image processing error:", err);
       alert(`Processing error: ${err.message}`);
+      if (this.connStatus) this.connStatus.textContent = "Error processing image";
     }
   }
 }

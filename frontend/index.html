@@ -3,234 +3,473 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SeeForMe — AI Assistive Navigation</title>
+  <title>SeeForMe — AI Assistive Navigation for the Visually Impaired</title>
+  <meta name="description" content="A real-time computer vision pipeline that acts like a sighted companion, detecting hazards, estimating distances, and delivering spoken spatial alerts.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div class="app-shell">
-    <!-- Top Navigation Bar -->
-    <header class="top-nav">
-      <div class="brand">
-        <div class="brand-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-        </div>
-        <div class="brand-text">
-          <h1>SeeForMe</h1>
-          <span class="badge">Assistive Vision v0.1</span>
-        </div>
+<body class="page-wrapper">
+  <!-- Global Top Navigation -->
+  <header class="site-nav">
+    <a href="index.html" class="brand-link">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
       </div>
-
-      <div class="header-status">
-        <div class="status-indicator">
-          <span class="status-dot pulse" id="conn-dot"></span>
-          <span id="conn-status">Connecting...</span>
-        </div>
-        <div class="hardware-chip" id="hw-chip">
-          <span class="chip-label">ENGINE</span>
-          <span class="chip-val" id="hw-name">Detecting...</span>
-        </div>
-        <div class="fps-chip">
-          <span class="chip-label">FPS</span>
-          <span class="chip-val" id="fps-val">0.0</span>
-        </div>
+      <div class="brand-text">
+        <h1>SeeForMe</h1>
       </div>
-    </header>
+    </a>
 
-    <!-- Main Workspace Grid -->
-    <main class="main-layout">
-      <!-- Left: Vision Feeds Area -->
-      <section class="viewport-section">
-        <div class="video-container glass-panel">
-          <div class="viewport-header">
-            <div class="feed-title">
-              <span class="live-tag">LIVE FEED</span>
-              <span id="active-cam-label">Webcam View</span>
-            </div>
-            <div class="viewport-actions">
-              <button id="toggle-depth-btn" class="btn btn-ghost" title="Toggle Depth Map Overlay">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-                  <polyline points="2 17 12 22 22 17"/>
-                  <polyline points="2 12 12 17 22 12"/>
-                </svg>
-                <span>Depth Heatmap</span>
-              </button>
-            </div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="nav-link active">Home</a></li>
+      <li><a href="dashboard.html" class="nav-link">Live Dashboard</a></li>
+      <li><a href="architecture.html" class="nav-link">Architecture</a></li>
+      <li><a href="docs.html" class="nav-link">API & Docs</a></li>
+      <li><a href="about.html" class="nav-link">About & Roadmap</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div class="status-pill" id="engine-status-pill">
+        <span class="status-dot online" id="conn-dot"></span>
+        <span id="hw-name">Loading...</span>
+      </div>
+      <a href="https://github.com/jigyasaG01/SeeForMe" target="_blank" rel="noopener noreferrer" class="github-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        <span>GitHub</span>
+      </a>
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-pill">
+            <span class="status-dot online"></span>
+            <span>Real-time AI Perception System</span>
+          </div>
+          <h2 class="hero-title">
+            A Sighted Companion in Your <span class="gradient-text">Pocket</span>.
+          </h2>
+          <p class="hero-desc">
+            SeeForMe transforms ordinary camera feeds into an intelligent navigation assistant. By combining <strong>YOLOv8 object detection</strong>, <strong>monocular depth estimation</strong>, and <strong>low-latency spatial voice alerts</strong>, it guides visually impaired users around hazards with precision.
+          </p>
+
+          <div class="hero-ctas">
+            <a href="dashboard.html" class="btn btn-primary btn-lg">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              <span>Launch Live Dashboard</span>
+            </a>
+            <a href="architecture.html" class="btn btn-secondary btn-lg">
+              <span>How It Works</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
           </div>
 
-          <!-- Video & Overlay Canvas Container -->
-          <div class="media-stage" id="media-stage">
-            <video id="webcam" playsinline autoplay muted></video>
-            <canvas id="overlay-canvas"></canvas>
-            <!-- Depth Colormap Feed Overlay -->
-            <img id="depth-img" alt="Depth Map" style="display: none;" />
+          <div class="hero-stats">
+            <div class="stat-item">
+              <h3>40M+</h3>
+              <p>Blind Worldwide</p>
+            </div>
+            <div class="stat-item">
+              <h3>250M+</h3>
+              <p>Low Vision</p>
+            </div>
+            <div class="stat-item">
+              <h3>&lt; 300ms</h3>
+              <p>Perception Cycle</p>
+            </div>
+          </div>
+        </div>
 
-            <!-- Idle / Start Placeholder Overlay -->
-            <div class="viewport-idle-cover" id="idle-cover">
-              <div class="idle-content">
-                <div class="idle-icon-ring">
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                    <circle cx="12" cy="13" r="4"/>
+        <!-- Floating UI Mockup -->
+        <div class="hero-visual">
+          <div class="mockup-card">
+            <div class="mockup-header">
+              <div class="mockup-dots">
+                <span class="mockup-dot red"></span>
+                <span class="mockup-dot yellow"></span>
+                <span class="mockup-dot green"></span>
+              </div>
+              <span style="font-size: 0.76rem; font-family: var(--font-mono); color: var(--text-faint);">PERCEPTION STREAM // 640x480</span>
+            </div>
+            <div class="mockup-feed-preview">
+              <!-- Simulated Bounding Boxes -->
+              <div style="position: absolute; left: 12%; top: 20%; width: 28%; height: 60%; border: 2px solid var(--accent-rose); border-radius: 6px; box-shadow: 0 0 12px var(--accent-rose);">
+                <span style="position: absolute; top: -18px; left: 0; background: var(--accent-rose); color: #fff; font-size: 0.65rem; font-weight: 700; padding: 1px 6px; border-radius: 4px;">PERSON • 1.2m (AHEAD)</span>
+              </div>
+              <div style="position: absolute; right: 15%; top: 35%; width: 34%; height: 45%; border: 2px solid var(--accent-amber); border-radius: 6px; box-shadow: 0 0 12px var(--accent-amber);">
+                <span style="position: absolute; top: -18px; left: 0; background: var(--accent-amber); color: #000; font-size: 0.65rem; font-weight: 700; padding: 1px 6px; border-radius: 4px;">BICYCLE • 2.5m (RIGHT)</span>
+              </div>
+              <!-- Floating Alert Banner -->
+              <div class="mockup-alert-float">
+                <div class="speaker-icon pulse">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
                   </svg>
                 </div>
-                <h3>Camera Inactive</h3>
-                <p>Start the live camera or upload a test frame to begin real-time obstacle detection & distance calculation.</p>
-                <div class="idle-actions">
-                  <button id="start-cam-btn" class="btn btn-primary">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
-                    <span>Start Navigation Feed</span>
-                  </button>
-                  <label class="btn btn-secondary file-upload-btn">
-                    <input type="file" id="file-input" accept="image/*" style="display:none;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                      <polyline points="17 8 12 3 7 8"/>
-                      <line x1="12" y1="3" x2="12" y2="15"/>
-                    </svg>
-                    <span>Test Single Image</span>
-                  </label>
+                <div>
+                  <div style="font-size: 0.68rem; font-weight: 700; color: var(--accent-cyan); letter-spacing: 0.05em;">SPOKEN GUIDANCE</div>
+                  <div style="font-size: 0.9rem; font-weight: 600; color: #fff;">"Caution: Person, 1 meter ahead, directly ahead."</div>
                 </div>
               </div>
             </div>
-
-            <!-- Active Voice Toast Banner -->
-            <div class="voice-alert-banner" id="voice-toast" style="display:none;">
-              <div class="speaker-icon pulse">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
-                </svg>
-              </div>
-              <div class="toast-content">
-                <span class="toast-title">VOICE ALERT</span>
-                <span class="toast-text" id="voice-toast-msg">Person, 2 meters ahead, slightly left.</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bottom Control Bar -->
-          <div class="feed-controls">
-            <div class="control-group">
-              <button id="cam-toggle-stream-btn" class="btn btn-control" disabled>
-                <span id="cam-toggle-text">Pause Stream</span>
-              </button>
-              <button id="cam-flip-btn" class="btn btn-control" title="Switch Front/Back Camera">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 10c0-4.418-3.582-8-8-8s-8 3.582-8 8h3l-4 5-4-5h3c0-5.523 4.477-10 10-10s10 4.477 10 10z"/>
-                  <path d="M4 14c0 4.418 3.582 8 8 8s8-3.582 8-8h-3l4-5 4 5h-3c0 5.523-4.477 10-10 10S4 19.523 4 14z"/>
-                </svg>
-                <span>Switch Camera</span>
-              </button>
-            </div>
-
-            <div class="control-group audio-controls">
-              <button id="audio-toggle-btn" class="btn btn-control active-audio" title="Toggle Spoken Speech">
-                <svg id="audio-icon-on" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-                </svg>
-                <span id="audio-btn-text">Voice: ON</span>
-              </button>
-              <button id="test-speech-btn" class="btn btn-ghost" title="Test Web Speech Synthesis">
-                <span>Test Voice</span>
-              </button>
-            </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </section>
 
-      <!-- Right: Telemetry, Alerts & Settings -->
-      <aside class="sidebar-section">
-        <!-- Spoken Alerts Log Card -->
-        <div class="card glass-panel alerts-card">
-          <div class="card-header">
-            <h3>Spoken Guidance History</h3>
-            <span class="count-badge" id="alerts-count">0</span>
+  <!-- Problem Statement Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">The Humanitarian Challenge</span>
+        <h2 class="section-title">The Gap in Modern Mobility Aids</h2>
+        <p class="section-subtitle">
+          Canes and guide dogs provide essential contact protection, but cannot recognize approaching hazards, announce directional bearing, or estimate distance before a collision happens.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box icon-cyan">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
           </div>
-          <div class="alerts-log-container" id="alerts-log">
-            <div class="empty-state" id="empty-alerts-placeholder">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
-              </svg>
-              <p>No alerts yet. Point camera at obstacles to trigger prioritized voice alerts.</p>
-            </div>
+          <h3>Traditional Canes</h3>
+          <p>Effective only at arm's reach. Low obstacles or waist-height overhangs (like open car trunks or signs) are frequently missed.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box icon-amber">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h3>Delayed Perception</h3>
+          <p>By the time a cane taps an unexpected vehicle or pedestrian, reaction windows are often too narrow to avoid disorientation.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box icon-emerald">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <h3>The SeeForMe Solution</h3>
+          <p>Continuous computer vision monitors ahead, estimating distance in meters and delivering debounced spatial audio guidance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Features Grid -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Core Capabilities</span>
+        <h2 class="section-title">Built for Real-World Reliability</h2>
+        <p class="section-subtitle">
+          Every stage of the pipeline is crafted to ensure low latency, minimal false alarms, and clear audio guidance.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box icon-cyan">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+          </div>
+          <h3>YOLOv8 Object Detection</h3>
+          <p>Instant identification of pedestrians, cars, buses, bikes, dogs, chairs, and obstacles at high frame rates.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box icon-indigo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+              <polyline points="2 17 12 22 22 17"/>
+              <polyline points="2 12 12 17 22 12"/>
+            </svg>
+          </div>
+          <h3>MiDaS Monocular Depth</h3>
+          <p>Estimates relative depth maps directly from a single RGB camera, eliminating the need for bulky stereo rigs or LiDAR.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box icon-emerald">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </div>
+          <h3>Spatial-Depth Fusion</h3>
+          <p>Samples the depth map within each bounding box to determine exact distance brackets and directional bearing.</p>
+        </div>
+
+        <div class="feature-card glass-panel">
+          <div class="feature-icon-box icon-amber">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+          </div>
+          <h3>Intelligent Debouncing</h3>
+          <p>Suppresses repetitive audio chatter. Only repeats alerts after cooldown or when a hazard approaches significantly closer.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Pipeline Stepper -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Interactive Pipeline</span>
+        <h2 class="section-title">From Raw Pixel to Spoken Guidance</h2>
+        <p class="section-subtitle">
+          Click through the 5 steps to see how incoming video frames are transformed into life-saving verbal alerts.
+        </p>
+      </div>
+
+      <div class="stepper-container">
+        <div class="stepper-nav">
+          <button class="step-btn active" data-step="1">
+            <span class="step-num">1</span>
+            <span>Object Detection</span>
+          </button>
+          <button class="step-btn" data-step="2">
+            <span class="step-num">2</span>
+            <span>Monocular Depth</span>
+          </button>
+          <button class="step-btn" data-step="3">
+            <span class="step-num">3</span>
+            <span>Spatial Fusion</span>
+          </button>
+          <button class="step-btn" data-step="4">
+            <span class="step-num">4</span>
+            <span>Prioritization</span>
+          </button>
+          <button class="step-btn" data-step="5">
+            <span class="step-num">5</span>
+            <span>Voice Synthesis</span>
+          </button>
+        </div>
+
+        <div class="step-display glass-panel">
+          <div class="step-info">
+            <h4 id="step-title">1. YOLOv8 Object Detection</h4>
+            <p id="step-desc">
+              Incoming 30 FPS RGB video frames are fed through an optimized YOLOv8 neural network. The detector pinpoints all visible obstacles (pedestrians, vehicles, obstacles, animals), producing bounded coordinate boxes, class classifications, and confidence probabilities in under 25ms.
+            </p>
+          </div>
+
+          <div class="code-box">
+            <span class="code-badge" id="step-badge">PYTHON / ULTRALYTICS</span>
+            <pre><code id="step-code"># Ultralytics YOLOv8 inference
+results = model.predict(frame_rgb, conf=0.40)
+for box in results[0].boxes:
+    class_name = names[int(box.cls[0])]
+    confidence = float(box.conf[0])
+    x1, y1, x2, y2 = box.xyxy[0]</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Stack & Datasets Grid -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Under the Hood</span>
+        <h2 class="section-title">Open Technology Stack & Datasets</h2>
+        <p class="section-subtitle">
+          Built on proven, state-of-the-art open source computer vision and deep learning foundations.
+        </p>
+      </div>
+
+      <div class="badges-cloud">
+        <span class="tech-badge">⚡ Ultralytics YOLOv8</span>
+        <span class="tech-badge">👁️ Intel MiDaS Small</span>
+        <span class="tech-badge">🔥 PyTorch 2.14</span>
+        <span class="tech-badge">🚀 FastAPI Backend</span>
+        <span class="tech-badge">📡 WebSocket Streaming</span>
+        <span class="tech-badge">🔊 Web Speech API</span>
+        <span class="tech-badge">🖼️ COCO Dataset</span>
+        <span class="tech-badge">🏙️ Cityscapes & Mapillary</span>
+        <span class="tech-badge">📐 NYU Depth V2</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Got Questions?</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">
+          Answers to common questions regarding hardware, precision, safety, and roadmap.
+        </p>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item open">
+          <button class="faq-question">
+            <span>Does SeeForMe require LiDAR or specialized stereo cameras?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            No. SeeForMe utilizes deep monocular relative depth estimation (MiDaS), allowing it to work with standard RGB cameras found on smartphones, laptops, or low-cost wearable clip-on cameras.
           </div>
         </div>
 
-        <!-- Real-time Obstacles in View -->
-        <div class="card glass-panel objects-card">
-          <div class="card-header">
-            <h3>Obstacles in View</h3>
-            <span class="count-badge" id="objects-count">0</span>
-          </div>
-          <div class="objects-list-container" id="objects-list">
-            <div class="empty-state">
-              <p>Scanning environment...</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Latency & Pipeline Metrics -->
-        <div class="card glass-panel telemetry-card">
-          <div class="card-header">
-            <h3>Pipeline Latency</h3>
-          </div>
-          <div class="telemetry-grid">
-            <div class="metric-box">
-              <span class="metric-label">YOLOv8</span>
-              <span class="metric-value" id="t-yolo">0 ms</span>
-            </div>
-            <div class="metric-box">
-              <span class="metric-label">MiDaS Depth</span>
-              <span class="metric-value" id="t-depth">0 ms</span>
-            </div>
-            <div class="metric-box">
-              <span class="metric-label">Fusion & Rank</span>
-              <span class="metric-value" id="t-fusion">0 ms</span>
-            </div>
-            <div class="metric-box highlight">
-              <span class="metric-label">Total Cycle</span>
-              <span class="metric-value" id="t-total">0 ms</span>
-            </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How does the system prevent overwhelming users with too many alerts?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            The prioritizer features a central walking corridor filter and a temporal debouncer. Objects on the periphery are deprioritized, and identical alerts are suppressed within a 3-second cooldown unless an obstacle moves significantly closer.
           </div>
         </div>
 
-        <!-- Tuning & Calibration Sliders -->
-        <div class="card glass-panel settings-card">
-          <div class="card-header">
-            <h3>Calibration</h3>
-          </div>
-          <div class="settings-content">
-            <div class="slider-control">
-              <div class="slider-header">
-                <label for="conf-slider">Detection Confidence</label>
-                <span id="conf-val-label">40%</span>
-              </div>
-              <input type="range" id="conf-slider" min="20" max="80" value="40" step="5">
-            </div>
-
-            <div class="slider-control">
-              <div class="slider-header">
-                <label for="rate-slider">Speech Speed</label>
-                <span id="rate-val-label">1.1x</span>
-              </div>
-              <input type="range" id="rate-slider" min="0.8" max="1.6" value="1.1" step="0.1">
-            </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Can this run entirely offline on a phone or smart glasses?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            Yes! While the current phase runs as a FastAPI prototype, the roadmap includes compiling the quantized models to TensorFlow Lite (Android) and CoreML (iOS) for 100% on-device, offline processing.
           </div>
         </div>
-      </aside>
-    </main>
-  </div>
 
-  <script src="app.js"></script>
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Is SeeForMe intended to replace a white cane or guide dog?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            No. This is an educational and portfolio assistive technology prototype. It is designed to complement existing orientation and mobility aids as a second set of "eyes," not to replace certified tools.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-banner">
+        <h2>Ready to Experience SeeForMe?</h2>
+        <p>Launch the interactive live vision console directly in your browser. Stream your webcam or test sample images to see real-time bounding boxes and spoken alerts.</p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+          <a href="dashboard.html" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            <span>Open Live Dashboard</span>
+          </a>
+          <a href="docs.html" class="btn btn-secondary btn-lg">Read Documentation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="brand-link">
+          <div class="brand-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>SeeForMe</h1>
+          </div>
+        </div>
+        <p class="footer-desc">
+          An open-source assistive navigation vision prototype helping visually impaired people navigate safely.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="dashboard.html">Live Dashboard</a></li>
+          <li><a href="architecture.html">Architecture</a></li>
+          <li><a href="docs.html">API & Docs</a></li>
+          <li><a href="about.html">About & Roadmap</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/jigyasaG01/SeeForMe" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+          <li><a href="https://docs.ultralytics.com/" target="_blank" rel="noopener noreferrer">Ultralytics Docs</a></li>
+          <li><a href="https://github.com/isl-org/MiDaS" target="_blank" rel="noopener noreferrer">Intel MiDaS</a></li>
+          <li><a href="docs.html#quickstart">Quickstart Guide</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Disclaimer</h4>
+        <div class="footer-disclaimer-box">
+          SeeForMe is an educational and prototype engineering project. It has not undergone clinical safety certification. Do not rely on it as a substitute for certified mobility aids.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 SeeForMe Project. MIT License.</span>
+      <span>Built with YOLOv8, PyTorch & FastAPI by <a href="https://github.com/jigyasaG01" target="_blank" rel="noopener noreferrer" style="color: var(--accent-cyan); text-decoration: none;">jigyasaG01</a></span>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
 </body>
 </html>

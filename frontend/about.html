@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About & Roadmap — SeeForMe</title>
+  <meta name="description" content="Mission, 8-stage roadmap, and ethical safety disclaimer for the SeeForMe assistive vision project.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-wrapper">
+  <!-- Global Top Navigation -->
+  <header class="site-nav">
+    <a href="index.html" class="brand-link">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>SeeForMe</h1>
+      </div>
+    </a>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="dashboard.html" class="nav-link">Live Dashboard</a></li>
+      <li><a href="architecture.html" class="nav-link">Architecture</a></li>
+      <li><a href="docs.html" class="nav-link">API & Docs</a></li>
+      <li><a href="about.html" class="nav-link active">About & Roadmap</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <div class="status-pill" id="engine-status-pill">
+        <span class="status-dot online" id="conn-dot"></span>
+        <span id="hw-name">Loading...</span>
+      </div>
+      <a href="https://github.com/jigyasaG01/SeeForMe" target="_blank" rel="noopener noreferrer" class="github-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        <span>GitHub</span>
+      </a>
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section class="section" style="padding: 60px 0 30px;">
+    <div class="container">
+      <span class="section-tag">Vision & Milestones</span>
+      <h2 class="section-title">Mission, Ethics & Project Roadmap</h2>
+      <p class="section-subtitle" style="margin: 0;">
+        How SeeForMe was conceived, current developmental progress, and future milestones toward edge device deployment.
+      </p>
+    </div>
+  </section>
+
+  <!-- Mission Section -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="glass-panel" style="padding: 36px; margin-bottom: 40px;">
+        <h3 style="font-size: 1.4rem; margin-bottom: 16px; color: var(--accent-cyan);">Why This Project Exists</h3>
+        <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 14px;">
+          Globally, roughly <strong>40 million people</strong> are blind and over <strong>250 million</strong> experience moderate to severe visual impairment. While tools like guide dogs and white canes provide irreplaceable tactile defense against physical obstacles at ground level, they cannot recognize object categories, read contextual surroundings, or estimate distances in advance.
+        </p>
+        <p style="color: var(--text-muted); line-height: 1.7;">
+          SeeForMe prototypes the core software pipeline to bridge that sensory gap — acting like a calm, reliable, sighted companion delivering real-time verbal alerts.
+        </p>
+      </div>
+
+      <!-- Roadmap Timeline -->
+      <div class="glass-panel" style="padding: 36px;">
+        <h3 style="font-size: 1.4rem; margin-bottom: 24px; color: var(--accent-cyan);">Project Development Roadmap</h3>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <!-- Stage 1 -->
+          <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.4); font-size: 0.8rem; font-weight: 700; white-space: nowrap;">STAGE 1 • DONE</span>
+            <div>
+              <strong style="color: #fff;">Backend Prototype</strong>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">YOLOv8n object detection + MiDaS depth running on camera feeds via FastAPI server.</p>
+            </div>
+          </div>
+
+          <!-- Stage 2 -->
+          <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.4); font-size: 0.8rem; font-weight: 700; white-space: nowrap;">STAGE 2 • DONE</span>
+            <div>
+              <strong style="color: #fff;">Text-to-Speech (TTS) Audio Generation</strong>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Integrated browser Web Speech API vocalizer with low-latency spoken guidance.</p>
+            </div>
+          </div>
+
+          <!-- Stage 3 -->
+          <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.4); font-size: 0.8rem; font-weight: 700; white-space: nowrap;">STAGE 3 • DONE</span>
+            <div>
+              <strong style="color: #fff;">Prioritization & Debouncing Logic</strong>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Central walking-path filter, distance-drop triggers, and cooldown timers to prevent repetitive chatter.</p>
+            </div>
+          </div>
+
+          <!-- Stage 4 -->
+          <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.4); font-size: 0.8rem; font-weight: 700; white-space: nowrap;">STAGE 4 • DONE</span>
+            <div>
+              <strong style="color: #fff;">Modern Interactive Multi-Page Web Platform</strong>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Production-grade landing page, dedicated live vision dashboard, photo test lab, and developer documentation.</p>
+            </div>
+          </div>
+
+          <!-- Stage 5 -->
+          <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <span class="badge" style="background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); border-color: rgba(6, 182, 212, 0.4); font-size: 0.8rem; font-weight: 700; white-space: nowrap;">STAGE 5 • IN PROGRESS</span>
+            <div>
+              <strong style="color: #fff;">Latency & Frame-Budget Benchmarking</strong>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Optimizing pipeline cycle times to achieve consistent 300–500ms response on consumer hardware.</p>
+            </div>
+          </div>
+
+          <!-- Stage 6 -->
+          <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); border-color: rgba(245, 158, 11, 0.4); font-size: 0.8rem; font-weight: 700; white-space: nowrap;">STAGE 6 • PLANNED</span>
+            <div>
+              <strong style="color: #fff;">On-Device Mobile Deployment (TFLite / CoreML)</strong>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Quantize models for offline inference directly on iOS (Neural Engine) and Android (NNAPI).</p>
+            </div>
+          </div>
+
+          <!-- Stage 7 -->
+          <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <span class="badge" style="background: rgba(255, 255, 255, 0.1); color: var(--text-muted); border-color: var(--panel-border); font-size: 0.8rem; font-weight: 700; white-space: nowrap;">STAGE 7 • STRETCH</span>
+            <div>
+              <strong style="color: #fff;">Fine-Tuning on Walkway Hazards</strong>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Train custom classes for curbs, stairs, drop-offs, and potholes using Mapillary and Roboflow Universe.</p>
+            </div>
+          </div>
+
+          <!-- Stage 8 -->
+          <div style="display: flex; gap: 16px; align-items: flex-start;">
+            <span class="badge" style="background: rgba(255, 255, 255, 0.1); color: var(--text-muted); border-color: var(--panel-border); font-size: 0.8rem; font-weight: 700; white-space: nowrap;">STAGE 8 • STRETCH</span>
+            <div>
+              <strong style="color: #fff;">User Studies & Assistive Testing</strong>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Pilot field trials with visually impaired participants to evaluate auditory ergonomics and cognitive load.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ethical & Safety Disclaimer -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="glass-panel" style="padding: 32px; border-color: rgba(244, 63, 94, 0.3);">
+        <h3 style="color: var(--accent-rose); font-size: 1.3rem; margin-bottom: 12px;">Safety & Ethical Disclaimer</h3>
+        <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
+          This software is developed strictly for educational, experimental, and portfolio demonstration purposes. It has <strong>not</strong> been evaluated or certified by medical, assistive technology, or safety regulatory authorities.
+        </p>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+          Do not rely on SeeForMe as a safety-critical navigation aid, and never use it in hazardous traffic conditions without traditional mobility training and certified aids (such as a white cane or guide dog).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="brand-link">
+          <div class="brand-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>SeeForMe</h1>
+          </div>
+        </div>
+        <p class="footer-desc">
+          An open-source assistive navigation vision prototype helping visually impaired people navigate safely.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="dashboard.html">Live Dashboard</a></li>
+          <li><a href="architecture.html">Architecture</a></li>
+          <li><a href="docs.html">API & Docs</a></li>
+          <li><a href="about.html">About & Roadmap</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul class="footer-links">
+          <li><a href="https://github.com/jigyasaG01/SeeForMe" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+          <li><a href="https://docs.ultralytics.com/" target="_blank" rel="noopener noreferrer">Ultralytics Docs</a></li>
+          <li><a href="https://github.com/isl-org/MiDaS" target="_blank" rel="noopener noreferrer">Intel MiDaS</a></li>
+          <li><a href="docs.html#quickstart">Quickstart Guide</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Disclaimer</h4>
+        <div class="footer-disclaimer-box">
+          SeeForMe is an educational and prototype engineering project. It has not undergone clinical safety certification. Do not rely on it as a substitute for certified mobility aids.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 SeeForMe Project. MIT License.</span>
+      <span>Built with YOLOv8, PyTorch & FastAPI by <a href="https://github.com/jigyasaG01" target="_blank" rel="noopener noreferrer" style="color: var(--accent-cyan); text-decoration: none;">jigyasaG01</a></span>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
