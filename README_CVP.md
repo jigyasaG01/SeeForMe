@@ -1,6 +1,6 @@
-# SeeForMe: Assistive Navigation for the Visually Impaired
+# Assistive Navigation for the Visually Impaired
 
-A real-time computer vision system that helps visually impaired users navigate their surroundings by detecting obstacles, estimating distances, and delivering spoken alerts through a phone or smart-glasses camera feed.
+A computer vision system that helps visually impaired users navigate their surroundings by detecting obstacles, estimating distances, and delivering real-time spoken alerts through a phone or smart-glasses camera feed.
 
 ## Overview
 
@@ -70,15 +70,12 @@ Camera Frame
 
 ```bash
 # Clone the repo
-git clone https://github.com/jigyasaG01/SeeForMe.git
-cd SeeForMe
+git clone <your-repo-url>
+cd assistive-navigation
 
 # Create virtual environment
 python -m venv venv
-# On Linux/macOS:
-source venv/bin/activate
-# On Windows:
-venv\Scripts\activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -109,4 +106,4 @@ This is a prototype/educational project and has not been tested for safety-criti
 
 ## License
 
-MIT License
+Add your chosen license here (e.g., MIT).
