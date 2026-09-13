@@ -43,13 +43,19 @@ class SeeForMeApp {
     this.voiceToast = document.getElementById("voice-toast");
     this.voiceToastMsg = document.getElementById("voice-toast-msg");
 
-    // Sliders
+    // Sliders & Endpoint
     this.confSlider = document.getElementById("conf-slider");
     this.confValLabel = document.getElementById("conf-val-label");
     this.rateSlider = document.getElementById("rate-slider");
     this.rateValLabel = document.getElementById("rate-val-label");
+    this.backendInput = document.getElementById("backend-url-input");
 
     // Internal state
+    this.backendUrl = localStorage.getItem("seeforme_backend_url") || "";
+    if (!this.backendUrl && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
+      this.backendUrl = window.location.origin;
+    }
+
     this.stream = null;
     this.ws = null;
     this.isStreaming = false;
@@ -96,6 +102,19 @@ class SeeForMeApp {
       });
     }
 
+    if (this.backendInput) {
+      this.backendInput.value = this.backendUrl;
+      this.backendInput.addEventListener("change", (e) => {
+        this.backendUrl = e.target.value.trim().replace(/\/+$/, "");
+        localStorage.setItem("seeforme_backend_url", this.backendUrl);
+        this.fetchServerStatus();
+        if (this.ws) {
+          try { this.ws.close(); } catch (_) {}
+        }
+        this.connectWebSocket();
+      });
+    }
+
     if (this.fileInput) {
       this.fileInput.addEventListener("change", (e) => this.handleImageUpload(e));
     }
@@ -104,51 +123,78 @@ class SeeForMeApp {
   }
 
   async fetchServerStatus() {
+    const targetUrl = this.backendUrl ? `${this.backendUrl}/api/status` : "/api/status";
     try {
-      const res = await fetch("/api/status");
+      const res = await fetch(targetUrl);
       if (res.ok) {
         const data = await res.json();
         if (this.hwName) this.hwName.textContent = data.device || "CPU";
         if (this.connDot) this.connDot.classList.add("active");
         if (this.connStatus) this.connStatus.textContent = "Server Ready";
+      } else {
+        throw new Error("HTTP " + res.status);
       }
     } catch (err) {
       console.warn("Server status check failed:", err);
-      if (this.hwName) this.hwName.textContent = "Offline";
+      if (this.hwName) {
+        this.hwName.textContent = window.location.hostname.includes("vercel.app") ? "Vercel Preview" : "Offline";
+      }
+      if (this.connStatus) {
+        this.connStatus.textContent = window.location.hostname.includes("vercel.app") ? "Cloud Demo Mode" : "Server Offline";
+      }
     }
   }
 
   connectWebSocket() {
-    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const wsUrl = `${protocol}//${window.location.host}/ws/stream`;
+    let wsUrl;
+    if (this.backendUrl) {
+      const wsProto = this.backendUrl.startsWith("https") ? "wss:" : "ws:";
+      const host = this.backendUrl.replace(/^https?:\/\//, "");
+      wsUrl = `${wsProto}//${host}/ws/stream`;
+    } else {
+      const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+      wsUrl = `${protocol}//${window.location.host}/ws/stream`;
+    }
 
-    if (this.connStatus) this.connStatus.textContent = "Connecting WS...";
-    this.ws = new WebSocket(wsUrl);
+    if (this.connStatus && !window.location.hostname.includes("vercel.app")) {
+      this.connStatus.textContent = "Connecting WS...";
+    }
+    
+    try {
+      this.ws = new WebSocket(wsUrl);
 
-    this.ws.onopen = () => {
-      if (this.connDot) this.connDot.classList.add("active");
-      if (this.connStatus) this.connStatus.textContent = "Live Stream Connected";
-    };
+      this.ws.onopen = () => {
+        if (this.connDot) this.connDot.classList.add("active");
+        if (this.connStatus) this.connStatus.textContent = "Live Stream Connected";
+      };
 
-    this.ws.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        this.handleInferenceResult(data);
-      } catch (err) {
-        console.error("Failed to parse WS message:", err);
-      }
-      this.isProcessing = false;
-    };
+      this.ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          this.handleInferenceResult(data);
+        } catch (err) {
+          console.error("Failed to parse WS message:", err);
+        }
+        this.isProcessing = false;
+      };
 
-    this.ws.onclose = () => {
-      if (this.connDot) this.connDot.classList.remove("active");
-      if (this.connStatus) this.connStatus.textContent = "Disconnected (Retrying...)";
-      setTimeout(() => this.connectWebSocket(), 2500);
-    };
+      this.ws.onclose = () => {
+        if (this.connDot) this.connDot.classList.remove("active");
+        if (this.connStatus && !window.location.hostname.includes("vercel.app")) {
+          this.connStatus.textContent = "Disconnected (Retrying...)";
+        }
+        setTimeout(() => {
+          if (!this.backendUrl && window.location.hostname.includes("vercel.app")) return;
+          this.connectWebSocket();
+        }, 5000);
+      };
 
-    this.ws.onerror = (err) => {
-      console.error("WebSocket error:", err);
-    };
+      this.ws.onerror = (err) => {
+        console.warn("WebSocket status:", err);
+      };
+    } catch (err) {
+      console.warn("WebSocket init error:", err);
+    }
   }
 
   async startCamera() {
@@ -493,7 +539,8 @@ class SeeForMeApp {
     formData.append("return_depth_map", "true");
 
     try {
-      const res = await fetch("/api/process-frame", {
+      const targetUrl = this.backendUrl ? `${this.backendUrl}/api/process-frame` : "/api/process-frame";
+      const res = await fetch(targetUrl, {
         method: "POST",
         body: formData
       });
